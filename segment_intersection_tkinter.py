@@ -100,16 +100,17 @@ def check_intersection(seg_1, seg_2):
             return None
 
     # jeżeli iloczyn wektorowy wektorów 1 i 2 nie jest równy 0 to odcinki nie są równoległe
-    # używając równania prostych liczymy parametr prostej dla odcinka 1 i 2
-    # jeżeli proste się przecinają to ich równania są równe
-    # używając metody Kramera budujemy układ równań i liczymy parametry dla których te dwie proste się przecinają
+    # każdy punkt na na odcinku 1 możemy przedstawic w formie x = x1 + t1 * vec_x1 oraz y = y1 + t1 * vec_y1 gdzie t1 jest skalarem
+    # każdy punkt na odcinku 2 mozemy przedstawic w formie x = x2 + t2 * vec_x2 oraz y = y2 + t2 * vec_y2 gdzie t2 jest skalarem
+    # dwa odcinki przecinają się jeżeli możemy znaleźć takie t1 i t2 że x1 + t1 * vec_x1 = x2 + t2 * vec_x2 oraz y1 + t1 * vec_y1 = y2 + t2 * vec_y2
+    # rozwiązujemy układ równań metodą Kramera i obliczamy wartości parametrów t1 i t2 dla których odcinki się przecinają
 
-    # wzór parametr prostej zawierającej odcinek 1
+    # wzór na parametr t1 po zredukowaniu układu równań
     t1 = det1 / det
-    # parametr prostej zawierającej odcinek 2
+    # wzór na parametr t2 po zredukowaniu układu równań
     t2 = det2 / det
 
-    # liczymy współrzędne punktu przecięcia leżącego na prostej
+    # liczymy współrzędne punktu przecięcia
     intersection_x = seg_1.start.x + t2 * vec_x1
     intersection_y = seg_1.start.y + t2 * vec_y1
 
@@ -131,6 +132,10 @@ def check_intersection(seg_1, seg_2):
 
 
 def find_overlapping_segment(seg_1, seg_2):
+    # sprawdzamy czy odcinki są rozłączne
+    if not (seg_1.end.x >= seg_2.start.x and seg_2.end.x >= seg_1.start.x and seg_1.end.y >= seg_2.start.y and seg_2.end.y >= seg_1.start.y):
+        return None
+
     # analizując współrzędne początku i końca odcinków znajdujemy współrzędne początku i końca odcinka wspólnego
     x_start = max(min(seg_1.start.x, seg_1.end.x), min(seg_2.start.x, seg_2.end.x))
     y_start = max(min(seg_1.start.y, seg_1.end.y), min(seg_2.start.y, seg_2.end.y))
